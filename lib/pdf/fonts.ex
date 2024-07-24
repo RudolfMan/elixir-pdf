@@ -49,7 +49,7 @@ defmodule Pdf.Fonts do
       %{last_id: last_id, fonts: fonts, objects: objects} = state
       font_module = ExternalFont.load(path)
 
-      unless fonts[font_module.name] do
+      unless fonts[font_module.name()] do
         id = last_id + 1
         font_object = ObjectCollection.create_object(objects, nil)
 
@@ -69,7 +69,7 @@ defmodule Pdf.Fonts do
           object: font_object
         }
 
-        fonts = Map.put(fonts, font_module.name, reference)
+        fonts = Map.put(fonts, font_module.name(), reference)
         {:reply, reference, %{state | last_id: id, fonts: fonts}}
       else
         {:reply, :already_exists, state}
@@ -122,7 +122,7 @@ defmodule Pdf.Fonts do
     end
 
     defp lookup_font(%{fonts: fonts} = state, font_module) do
-      case fonts[font_module.name] do
+      case fonts[font_module.name()] do
         nil -> load_font(state, font_module)
         font -> {state, font}
       end
@@ -138,7 +138,7 @@ defmodule Pdf.Fonts do
         object: font_object
       }
 
-      fonts = Map.put(fonts, font_module.name, reference)
+      fonts = Map.put(fonts, font_module.name(), reference)
       {%{state | last_id: id, fonts: fonts}, reference}
     end
   end

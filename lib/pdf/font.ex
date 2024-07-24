@@ -161,10 +161,10 @@ defmodule Pdf.Font do
     |> Dictionary.put("Type", n("Font"))
     |> Dictionary.put("Subtype", n("Type1"))
     |> Dictionary.put("Name", n("F#{id}"))
-    |> Dictionary.put("BaseFont", n(font.name))
+    |> Dictionary.put("BaseFont", n(font.name()))
     |> Dictionary.put("FirstChar", 32)
-    |> Dictionary.put("LastChar", font.last_char)
-    |> Dictionary.put("Widths", Array.new(Enum.drop(font.widths, 32)))
+    |> Dictionary.put("LastChar", font.last_char())
+    |> Dictionary.put("Widths", Array.new(Enum.drop(font.widths(), 32)))
     |> Dictionary.put("Encoding", n("WinAnsiEncoding"))
   end
 
